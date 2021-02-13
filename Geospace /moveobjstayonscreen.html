@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<!-- below is font for poppins code -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<style>
+  img {
+    position:absolute;
+    top:120px;
+    left:120px;
+  }
+</style>
+<body>
+<img src="https://www.gravatar.com/avatar/c92b1d1bf983865eb827c08bf66171c1/?default=&s=64"/>
+
+<script>
+    $(document).keydown(function(key) {
+      var left = $('img').position().left;
+      var top = $('img').position().top;
+      var docWidth = $(document).width();
+      var docHeight = $(document).height();
+      var imgWidth = $('img').width();
+      var imgHeight = $('img').height();
+      
+      console.log('left' + $('img').css('left'));
+      console.log('top' + $('img').css('top'));
+      console.log(docWidth);
+      console.log(docHeight);
+      console.log(imgWidth);
+      console.log(imgHeight);
+      
+        switch(parseInt(key.which,10)) {
+            case 37:
+            		if(left >= 30) {
+                	$('img').css({left: "-=30px"}, 'fast');   
+                  console.log('left open');
+                } else
+                	$('img').css({left: "0px"}, 'fast'); 
+                break;
+            case 38:
+                if(top >= 30)
+                	$('img').css({top: "-=30px"}, 'fast');               
+                else
+                	$('img').css({top: "0px"}, 'fast'); 
+                break;
+            case 39:
+                if(left <= (docWidth - 30 - imgWidth))
+                	$('img').css({left: "+=30px"}, 'fast');               
+                else
+                	$('img').css({left: (docWidth -imgWidth) + "px"}, 'fast');
+                break;
+            case 40:
+                if(top <= (docHeight - 30 -imgHeight))
+                	$('img').css({top: "+=30px"}, 'fast');               
+                else
+                	$('img').css({top: (docHeight -imgHeight) + "px"}, 'fast');
+                break;
+        }
+      console.log('now left' + $('img').css('left'));
+      console.log('now top' + $('img').css('top'));
+    });
+
+</script>
+</body>

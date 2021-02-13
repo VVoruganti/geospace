@@ -76,6 +76,14 @@ zoom: 17,
 maxBounds: bounds // Sets bounds as max
 });
 </script>
+
+<script>
+    document.addEventListener('keydown', logKey);
+
+    function logKey(e) {
+        log.textContent += ` ${e.code}`;
+    }
+</script>
  
 </body>
 </html>

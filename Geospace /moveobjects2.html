@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Demo of changing position of an Image in JavaScript</title>
+<script language='JavaScript' type='text/JavaScript'>
+<!--
+
+//-->
+</script>
+<script>
+    var step=50;
+    document.addEventListener('keydown', function(event) {
+    if (event.code == 'KeyW') {
+        var x=document.getElementById('i1').offsetTop;
+        x= x -step;
+        document.getElementById('i1').style.top= x + "px";
+    }
+    if (event.code == 'KeyA') {
+        var y=document.getElementById('i1').offsetLeft;
+        y= y - step;
+        document.getElementById('i1').style.left= y + "px";
+    }
+    if (event.code == 'KeyS') {
+        var x=document.getElementById('i1').offsetTop;
+        x= x + step;
+        document.getElementById('i1').style.top= x + "px";
+    }
+    if (event.code == 'KeyD') {
+        var y=document.getElementById('i1').offsetLeft;
+        y= y + step;
+        document.getElementById('i1').style.left= y + "px";
+    }
+});
+</script>
+</head>
+<body>
+<!-- <img src=images/help.jpg id='i1' style="position:absolute; left: 500; top: 100;"> -->
+<img src="man1.png" id='i1' alt="a man" style="position:absolute; left: 500; top: 100;">
+<br><br><br><br>
+</body>
+</html>

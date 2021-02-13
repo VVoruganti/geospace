@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Restrict map panning to an area</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
+<!-- below is font for poppins code -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<img src="https://placekitten.com/111/112" id="monka">
+</body>
+
+<script>
+//I moved some of your declarations outside the function to make them global. I don't think the way you set up your move function inside your start function is a good practice. Keep things separated and modular as much as possible
+var monka = document.getElementById("monka");
+var deltaX = 0;
+var deltaY = 0;
+//I changed x and y to be centerX and centerY, which is a more descriptive name for them, as they will be the starting x and y values for the picture
+var objX, objY, centerX, centerY;
+
+function start () {
+    //I'm using document.body.clientHeight and Width instead of screen.AvailHeight and Width because those values don't work if you have an iframe or a window of less than maximum screen size
+    const scrnH = document.body.clientHeight;
+    const scrnW = document.body.clientWidth;
+    const imgH = 111;
+    const imgW = 112;
+    objX = scrnW/2 - imgW/2;
+    objY = scrnH/2 - imgH/2;
+    monka.style.top = objY + "px";
+    monka.style.left = objX + "px";
+    //At the beginning I need to explicitly set these variables to the same value so I can do math with thme later
+    centerX = objX;
+    centerY = objY;
+  }
+
+function move () {
+  //I moved around the order of things in this function so it would work. The first thing you need to do is figure out your random number between -25 and 25
+//   deltaX = Math.ceil(Math.random() * 50) - 25;
+//   deltaY = Math.ceil(Math.random() * 50) - 25;
+    deltaX = 50;
+    deltaY = 50;
+  //The logic here can probably be improved a little, I feel like someone smarter can trim this down a little. Basically I get my new coordinates, then figure out if the picture is more than 100px away from where it started, if it is then I subtract twice as much as I just added. Liek I said, this could be improved but it works
+  objX += deltaX;
+  objY += deltaY;
+	if ((Math.sqrt((centerX - objX) ** 2 + (centerY - objY) ** 2) >= 100)) {
+  	deltaX = -2 * deltaX;
+    deltaY = -2 * deltaY;
+    objX += deltaX;
+  	objY += deltaY;
+    //Need to add logic here to prevent your top and left values from becoming negative
+  }
+  //This needs to be converted from a number to a pixel value
+  monka.style.left = objX + "px";
+  monka.style.top = objY + "px";    
+}
+
+window.onload = start();
+//I changed this to 500ms because 100ms was making my eyes go crazy
+// setInterval(move, 500);
+
+// if key press left
+    // minus X by delta
+    objX -= deltaX;
+    monka.style.left = objX + "px";
+// if key press right
+    // plus X by delta
+    objX += deltaX;
+    monka.style.left = objX + "px";
+// if key press down
+    // minus Y by delta
+    objY -= deltaY;
+    monka.style.left = objX + "px";
+// if key press up
+    // plus Y by delta
+    objY += deltaY;
+    monka.style.left = objX + "px";
+
+</script>
+
+<style>
+    /* I put this rule in to make sure the body covers the entire viewable portion of your browser */
+body, html {
+  height: 100%
+}
+/* you need to give the picture an absolute position or else you cannot place it using top and left attributes */
+#monka {
+  position: absolute
+}
+</style>
