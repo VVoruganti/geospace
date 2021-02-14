@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#wrapper {
+    position: absolute;
+    /* width: 600px;  */
+    /* height: 600px;  */
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+    }
+
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+p {
+ text-align:center
+}
+.bg {
+  /* The image used */
+  background-image: url("home.png");
+
+  /* Full height */
+  height: 100%; 
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index:-100;
+}
+.content {
+    color: black;
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    /* text-shadow: -1px -1px 1px #000, 1px 1px 1px #000; */
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-90%, -100%);
+    /* position: relative; */
+    z-index: 100;
+    }
+
+    .content2 {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    /* text-shadow: -1px -1px 1px #000, 1px 1px 1px #000; */
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-95%, -80%);
+    /* position: relative; */
+    z-index: 100;
+    }
+
+</style>
+</head>
+<body>
+
+    <div id="wrapper">
+        <div class="content">    
+            <p>geospace</p>
+        </div>
+        <div class="content2">    
+            <p>start caching now</p>
+        </div>
+        <div class="bg"></div>
+    
+    </div>
+
+<!-- <div class="container">
+    <div class="bg"></div>
+    <div class="centered">Centered</div>
+</div> -->
+
+<!-- <p>This example creates a full page background image. Try to resize the browser window to see how it always will cover the full screen (when scrolled to top), and that it scales nicely on all screen sizes.</p> -->
+
+</body>
+</html>
