@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <script type="text/javascript" src="geojson.js"></script> 
     <style>
       body {
         margin: 0;
@@ -61,32 +62,34 @@ var map = new mapboxgl.Map({
   zoom: 17
 });
 
+map.dragRotate.disable();
+
 // code from the next step will go here!
-var geojson = {
-  type: 'FeatureCollection',
-  features: [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-122.1697, 37.4275]
-    },
-    properties: {
-      title: 'Stanford',
-      description: 'A drop from us :)'
-    }
-  },
-  {
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-122.1597, 37.4275]
-    },
-    properties: {
-      title: 'Stay smiling',
-      description: 'An apple a day keeps the doctor away!'
-    }
-  }]
-};
+// var geojson = {
+//   type: 'FeatureCollection',
+//   features: [{
+//     type: 'Feature',
+//     geometry: {
+//       type: 'Point',
+//       coordinates: [-122.1697, 37.4275]
+//     },
+//     properties: {
+//       title: 'Stanford',
+//       description: 'A drop from us :)'
+//     }
+//   },
+//   {
+//     type: 'Feature',
+//     geometry: {
+//       type: 'Point',
+//       coordinates: [-122.1597, 37.4275]
+//     },
+//     properties: {
+//       title: 'Stay smiling',
+//       description: 'An apple a day keeps the doctor away!'
+//     }
+//   }]
+// };
 
 // add markers to map
 geojson.features.forEach(function(marker) {
@@ -103,7 +106,48 @@ new mapboxgl.Marker(el)
   .addTo(map);
 });
 
+document.addEventListener('keydown', function(event) {
+if (event.code == 'KeyM') {
+      // grab the user's location (center of the map)
+      var center = map.getCenter();
+      console.log(center);
+      console.log(center.lat)
+      var marker = new mapboxgl.Marker()
+        .setLngLat([center.lng, center.lat])
+        .addTo(map);
+      geojson.append(center);
+      my_feature = Feature(geometry=Point((lng, lat)));
+      geojson.append(my_feature); 
+      
+  }
+});
 </script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAxJ_ZharmIdgdSJPJBbjABCqzzEU4gaMw",
+    authDomain: "geospace-treehacks-21.firebaseapp.com",
+    projectId: "geospace-treehacks-21",
+    storageBucket: "geospace-treehacks-21.appspot.com",
+    messagingSenderId: "107052862890",
+    appId: "1:107052862890:web:bb27ab3946dee8de09afd3",
+    measurementId: "G-WRWC40TKE0"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script src="index.js"></script>
 
 </body>
 </html>

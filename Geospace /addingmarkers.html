@@ -10,23 +10,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-	body { margin: 0; 
-    padding: 0; 
+	body { 
+        margin: 0; 
+        padding: 0; 
     }
 	
-    #map { position: absolute; 
-    top: 0; 
-    bottom: 0; 
-    width: 100%; 
+    #map { 
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        width: 100%; 
     }
 
     #wrapper {
-    position: absolute;
-    /* width: 600px;  */
-    /* height: 600px;  */
-    top: 0; 
-    bottom: 0; 
-    width: 100%; 
+        position: absolute;
+        top: 0; 
+        bottom: 0; 
+        width: 100%; 
     }
     
     .marker {
@@ -80,22 +80,23 @@
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoibmVoYW5uIiwiYSI6ImNrbDNidnBzdjAydncyd3F4MHRhZzdzenQifQ.YziXMRf8IncTofpbAilCnQ';
 // Set bounds to New York, New York
-var bounds = [
-//[-74.04728500751165, 40.68392799015035], // Southwest coordinates
-//[-73.91058699000139, 40.87764500765852] // Northeast coordinates
-[-122.238049, 37.33064149],
-[-122.101351, 37.52435851]
-];
+// var bounds = [
+// //[-74.04728500751165, 40.68392799015035], // Southwest coordinates
+// //[-73.91058699000139, 40.87764500765852] // Northeast coordinates
+// [-122.238049, 37.33064149],
+// [-122.101351, 37.52435851]
+// ];
  
 var map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/mapbox/streets-v11',
 center: [-122.1697, 37.4275],
 zoom: 17,
+dragPan: true
 // maxBounds: bounds // Sets bounds as max
 });
 
-options.scrollZoom = true;
+// map.options.scrollZoom = true;
 
 // code from the next step will go here!
 var geojson = {
@@ -166,10 +167,13 @@ new mapboxgl.Marker(el)
   }
   if (event.code == 'KeyM') {
       // grab the user's location (center of the map)
-      var {longitude, latitude} = map.getCenter();
+      var center = map.getCenter();
+      console.log(center);
+      console.log(center.lat)
       var marker = new mapboxgl.Marker()
-        .setLngLat([longitude, latitude])
+        .setLngLat([center.lng, center.lat])
         .addTo(map);
+
       // change user location into geojson point
       // add marker to geojson array by doing geojson.append (for later when it refreshes)
       // add marker to map
