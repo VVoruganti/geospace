@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Restrict map panning to an area</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
+<!-- below is font for poppins code -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+	body { margin: 0; 
+    padding: 0; 
+    }
+	
+    #map { position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+    }
+
+    #wrapper {
+    position: absolute;
+    /* width: 600px;  */
+    /* height: 600px;  */
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+    }
+    
+    .marker {
+        background-image: url('mapbox-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .mapboxgl-popup {
+        max-width: 200px;
+        }
+
+      .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+      }
+    .content {
+    color: black;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    /* text-shadow: -1px -1px 1px #000, 1px 1px 1px #000; */
+    position: relative;
+    z-index: 100;
+    }
+
+    .map {
+    /* color: #999999; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
+    }
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="content">    
+        <p>Geospace</p>
+        <img src="man1.png" id="i1" alt="a man" style="position:absolute; left: 500; top: 100;">
+    </div>
+    <div id="map" class="map"></div>
+
+</div>
+
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoibmVoYW5uIiwiYSI6ImNrbDNidnBzdjAydncyd3F4MHRhZzdzenQifQ.YziXMRf8IncTofpbAilCnQ';
+// Set bounds to New York, New York
+var bounds = [
+//[-74.04728500751165, 40.68392799015035], // Southwest coordinates
+//[-73.91058699000139, 40.87764500765852] // Northeast coordinates
+[-122.238049, 37.33064149],
+[-122.101351, 37.52435851]
+];
+ 
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [-122.1697, 37.4275],
+zoom: 17,
+// maxBounds: bounds // Sets bounds as max
+});
+
+options.scrollZoom = true;
+
+// code from the next step will go here!
+var geojson = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-122.1697, 37.4275]
+    },
+    properties: {
+      title: 'Stanford',
+      description: 'A drop from us :)'
+    }
+  },
+  {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-122.1597, 37.4275]
+    },
+    properties: {
+      title: 'Stay smiling',
+      description: 'An apple a day keeps the doctor away!'
+    }
+  }]
+};
+
+// add markers to map
+geojson.features.forEach(function(marker) {
+
+// create a HTML element for each feature
+var el = document.createElement('div');
+el.className = 'marker';
+
+// make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+  .addTo(map);
+});
+</script>
+
+<script>
+  var step=50;
+//   var docHeight = $(document).height();
+  document.addEventListener('keydown', function(event) {
+  if (event.code == 'KeyW') {
+      var x=document.getElementById('i1').offsetTop;
+      x= x -step;
+      document.getElementById('i1').style.top= x + "px";
+  }
+  if (event.code == 'KeyA') {
+      var y=document.getElementById('i1').offsetLeft;
+      y= y - step;
+      document.getElementById('i1').style.left= y + "px";
+  }
+  if (event.code == 'KeyS') {
+      var x=document.getElementById('i1').offsetTop;
+      x= x + step;
+      document.getElementById('i1').style.top= x + "px";
+  }
+  if (event.code == 'KeyD') {
+      var y=document.getElementById('i1').offsetLeft;
+      y= y + step;
+      document.getElementById('i1').style.left= y + "px";
+  }
+  if (event.code == 'KeyM') {
+      // grab the user's location (center of the map)
+      var {longitude, latitude} = map.getCenter();
+      var marker = new mapboxgl.Marker()
+        .setLngLat([longitude, latitude])
+        .addTo(map);
+      // change user location into geojson point
+      // add marker to geojson array by doing geojson.append (for later when it refreshes)
+      // add marker to map
+        // create HTML element
+            // var el = document.createElement('div');
+            // el.className = 'marker';
+        // make a marker for each feature and add to map
+  }
+});
+</script>
+ 
+</body>
+</html>
