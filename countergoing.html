@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <script type="text/javascript" src="geojson.js"></script> 
+    <script src = "https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <!-- <script type = "text/javascript" src = "index.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #wrapper {
+    position: absolute;
+    /* width: 600px;  */
+    /* height: 600px;  */
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+    /* height:100%; */
+    }
+      .marker {
+        background-image: url('mapbox-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .mapboxgl-popup {
+        max-width: 200px;
+        }
+
+      .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      .img {
+    position: absolute;
+    z-index: 100;
+    /* text-align: center; */
+    left: 46%;
+    top: 45%;
+    }
+
+    .img2 {
+    position: relative;
+    z-index: 100;
+    /* text-align: center; */
+    /* left: 46%;
+    top: 45%; */
+    text-align:right;
+    }
+
+   .h3 {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    /* text-shadow: -1px -1px 1px #000, 1px 1px 1px #000; */
+    position: relative;
+    z-index: 100;
+    top: 2%;
+    right: 3%;
+  text-align: right;
+}
+.content {
+    color: black;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    /* text-shadow: -1px -1px 1px #000, 1px 1px 1px #000; */
+    position: relative;
+    z-index: 100;
+    left: 2%;
+    /* text-align: center; */
+    }
+    </style>
+</head>
+<body>
+  <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
+<!-- <div id='map'></div> -->
+<div id="wrapper">
+    <div class="content">    
+        <p>geospace</p>
+        <!-- <img src="man1.png" id="i1" alt="a man" style="position:absolute; left: 500; top: 100;"> -->
+    </div>
+    <div class="h3">    
+        <p id="001">Start caching!</p>
+        <!-- <img src="man1.png" id="i1" alt="a man" style="position:absolute; left: 500; top: 100;"> -->
+    </div>
+    <div class="img">    
+        <!-- <p>Geospace</p> -->
+        <img src="man1.png" id="i1" alt="a man" >
+    </div>
+    <!-- <div class="img2">    
+        <img src="rect.png" id="i2" alt="rect" >
+    </div> -->
+    <div id="map" class="map"></div>
+
+</div>
+<!-- change map css of div (z overflow, css for div in background + stuff over it) to put stuff on top of it -->
+
+
+
+<!-- <button type="button">Click Me!</button> -->
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoibmVoYW5uIiwiYSI6ImNrbDNidnBzdjAydncyd3F4MHRhZzdzenQifQ.YziXMRf8IncTofpbAilCnQ';
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/streets-v11',
+  center: [-122.1697, 37.4275],
+  zoom: 17
+});
+
+map.dragRotate.disable();
+
+// code from the next step will go here!
+// var geojson = {
+//   type: 'FeatureCollection',
+//   features: [{
+//     type: 'Feature',
+//     geometry: {
+//       type: 'Point',
+//       coordinates: [-122.1697, 37.4275]
+//     },
+//     properties: {
+//       title: 'Stanford',
+//       description: 'A drop from us :)'
+//     }
+//   },
+//   {
+//     type: 'Feature',
+//     geometry: {
+//       type: 'Point',
+//       coordinates: [-122.1597, 37.4275]
+//     },
+//     properties: {
+//       title: 'Stay smiling',
+//       description: 'An apple a day keeps the doctor away!'
+//     }
+//   }]
+// };
+
+
+
+// add markers to map
+geojson.features.forEach(function(marker) {
+
+// create a HTML element for each feature
+var el = document.createElement('div');
+el.className = 'marker';
+
+// make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+  .addTo(map);
+});
+
+document.addEventListener('keydown', function(event) {
+if (event.code == 'KeyM') {
+    console.log("entered M");
+      // grab the user's location (center of the map)
+      var center = map.getCenter();
+      // console.log(center);
+      // console.log(center.lat);
+      var marker = new mapboxgl.Marker()
+        .setLngLat([center.lng, center.lat])
+        .addTo(map);
+      // geojson.append(center);
+      // my_feature = Feature(geometry=Point((lng, lat)));
+      // geojson.append(my_feature); 
+      // EXAMPLE SYNTAX
+      // firebaseRef.child("Text").set("ValueX");
+      var firebaseRef = firebase.database().ref();
+      // var id = (Math.random()*10).toString();
+      var id = Date.now().toString();
+      // firebaseRef.child("Points").set(id);
+      // firebaseRef.child("Points").child(id).child("lng").set(center.lng);
+      // firebaseRef.child("Points").child(id).child("lat").set(center.lat);
+      console.log(id);
+
+
+
+      function writeUserData(id, lng, lat) {
+        firebase.database().ref('Points/' + id).set({
+        Long: lng,
+        Lat: lat
+        });
+      }
+
+      writeUserData(id, center.lng, center.lat);
+
+
+      // firebaseRef.child("Points").child("Point2").child("lat").set(85);
+      // firebaseRef.child("Points").child("Point2").child("lng").set(155);
+      // firebaseRef.child("Sequence").set(3);
+  }
+});
+
+</script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAxJ_ZharmIdgdSJPJBbjABCqzzEU4gaMw",
+    authDomain: "geospace-treehacks-21.firebaseapp.com",
+    projectId: "geospace-treehacks-21",
+    storageBucket: "geospace-treehacks-21.appspot.com",
+    messagingSenderId: "107052862890",
+    appId: "1:107052862890:web:bb27ab3946dee8de09afd3",
+    measurementId: "G-WRWC40TKE0"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<!-- remove below if not using index.js file -->
+<script src="index.js"></script>
+
+<script>
+// read ALL geocaches in the db and populate the map with them
+// 1. Read the DB and get a snapshot of the data
+var allPoints = [];
+var starCountRef = firebase.database().ref();
+starCountRef.on('value', (snapshot) => {
+  const data123 = snapshot.val();
+  // console.log(data123);
+  // console.log(data123.Points);
+  for (x in data123.Points) {     
+    let latMap = data123.Points[x].Lat;
+    let lngMap = data123.Points[x].Long;
+    let newPoint = new Point(latMap, lngMap);
+    console.log(newPoint);
+    allPoints.push(newPoint);
+    // alert(allPoints);
+    var marker2 = new mapboxgl.Marker()
+        .setLngLat([lngMap, latMap])
+        .addTo(map);
+    // console.log(x[Long]);
+  }
+});
+console.log(allPoints);
+class Point {
+    constructor(lat, long) {
+      this.lat = lat;
+      this.lng = long;
+    }
+  }
+// var timer;
+          
+// function startTimer()
+// {
+            // timer = setInterval(
+
+// let P1 = new Point(10, 2014);
+// let P2 = new Point(20, 2019);
+// let P3 = new Point(30, 2014);
+// let P4 = new Point(40, 2019);
+
+// var pointlist = [P1,P2,P3,P4];
+console.log(allPoints);
+function compare() { 
+// var curlat= map.center.lat()
+// var curlong= map.center.lng()
+var center2 = map.getCenter();
+var curlat=center2.lat;
+var curlong=center2.lng;
+var mindist=0;
+for (var i=0; i < allPoints.length; i++)
+{
+var distance= Math.sqrt(Math.pow(curlat-allPoints[i].lat,2)+Math.pow(curlong-allPoints[i].lng,2))
+    if (distance<mindist || i==1)
+    {
+        mindist=distance*288200;
+    }
+}
+//return mindist;
+//alert(mindist); // in feet - change this to display "You are X feet from your destination."
+var element = document.getElementById("001");
+element.innerHTML = "You are " + Math.round(mindist) + " feet away from nearest cache!";
+
+console.log("I ran compare");
+}
+
+// setInterval(compare(), 3000); 
+// remove interval function
+
+document.addEventListener('keydown', function(event) {
+if (event.code == 'KeyI') {
+  compare();
+}
+});
+
+</script>
+
+</body>
+</html>
